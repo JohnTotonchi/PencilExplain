@@ -19,31 +19,28 @@
     // Initialize the last known x, y, and force values
     let lastX, lastY, lastForce;
 
-    // Add an event listener for touchmove events
-    canvas.addEventListener('touchmove', function(event) {
-      // Prevent scrolling on touch devices
-      event.preventDefault();
+    // Add an event listener for pointermove events
+    canvas.addEventListener('pointermove', function(event) {
+      // Check if the event was triggered by the Apple Pencil
+      if (event.pointerType === 'pen' && event.pointerId === 1) {
+        // Get the current x, y, and force values
+        const currentX = event.pageX;
+        const currentY = event.pageY;
+        const currentForce = event.pressure;
 
-      // Get the current touch point and force
-      const touch = event.touches[0];
-      const force = touch.force / touch.maximumPossibleForce;
+        // Draw a curve if the force value is above 0.25
+        if (currentForce > 0.25) {
+          ctx.beginPath();
+          ctx.moveTo(lastX, lastY);
+          ctx.quadraticCurveTo(lastX, lastY, (currentX + lastX) / 2, (currentY + lastY) / 2);
+          ctx.stroke();
+        }
 
-      // Draw a line or a dot based on the force value
-      if (force > 0.25) {
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(touch.pageX, touch.pageY);
-        ctx.stroke();
-      } else {
-        ctx.beginPath();
-        ctx.arc(touch.pageX, touch.pageY, 1, 0, 2 * Math.PI);
-        ctx.fill();
+        // Save the current x, y, and force values
+        lastX = currentX;
+        lastY = currentY;
+        lastForce = currentForce;
       }
-
-      // Save the current x, y, and force values
-      lastX = touch.pageX;
-      lastY = touch.pageY;
-      lastForce = force;
     }, false);
   </script>
 </body>
