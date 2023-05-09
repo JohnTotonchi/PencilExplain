@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple Pencil Drawing App</title>
+  <style>
+    #canvas {
+      border: 1px solid #000000;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="600" height="400"></canvas>
+  <script>
+    // Get the canvas and its context
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Initialize the last known x, y, and force values
+    let lastX, lastY, lastForce;
+
+    // Add an event listener for touchmove events
+    canvas.addEventListener('touchmove', function(event) {
+      // Prevent scrolling on touch devices
+      event.preventDefault();
+
+      // Get the current touch point and force
+      const touch = event.touches[0];
+      const force = touch.force / touch.maximumPossibleForce;
+
+      // Draw a line or a dot based on the force value
+      if (force > 0.25) {
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(touch.pageX, touch.pageY);
+        ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.arc(touch.pageX, touch.pageY, 1, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+      // Save the current x, y, and force values
+      lastX = touch.pageX;
+      lastY = touch.pageY;
+      lastForce = force;
+    }, false);
+  </script>
+</body>
+</html>
