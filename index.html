@@ -35,31 +35,42 @@
         
         let drawing = false;
 
-        function draw(e) {
-          if (!drawing) return;
+		let lastX, lastY; // Store last known position
 
-          ctx.lineWidth = 5;
-          ctx.lineCap = 'round';
-          ctx.strokeStyle = '#000';
+		function updateLastPosition(e) {
+			lastX = e.clientX;
+			lastY = e.clientY;
+		}
 
-          if (e.pressure > 0.10) {
-              pencilDot.style.display = 'none';
-            
-              ctx.lineTo(e.clientX, e.clientY);
-              ctx.stroke();
-              ctx.beginPath();
-              ctx.moveTo(e.clientX, e.clientY);
-          } else {
-              pencilDot.style.top = `${e.clientY - 2.5}px`;
-              pencilDot.style.left = `${e.clientX - 2.5}px`;
-              pencilDot.style.display = 'block';
-          }
-        }
+		function draw(e) {
+			if (!drawing) return;
+
+			ctx.lineWidth = 5;
+			ctx.lineCap = 'round';
+			ctx.strokeStyle = '#000';
+
+			if (e.pressure > 0.25) {
+				pencilDot.style.display = 'none';
+
+				ctx.beginPath();
+				ctx.moveTo(lastX, lastY);
+				ctx.lineTo(e.clientX, e.clientY);
+				ctx.stroke();
+
+				updateLastPosition(e); // Update the last position
+			} else {
+				pencilDot.style.top = `${e.clientY - 2.5}px`;
+				pencilDot.style.left = `${e.clientX - 2.5}px`;
+				pencilDot.style.display = 'block';
+				
+                updateLastPosition(e); // Update the last position
+			}
+		}
 
         canvas.addEventListener('pointerdown', (e) => {
             if (e.pointerType === 'pen') {
                 drawing = true;
-                ctx.beginPath();
+                updateLastPosition(e);
                 draw(e);
             }
         });
@@ -68,14 +79,15 @@
 
         canvas.addEventListener('pointerup', () => {
             drawing = false;
-            ctx.beginPath();
-            pencilDot.style.display = 'none';
+			ctx.beginPath();
+			pencilDot.style.display = 'none';
         });
 
         canvas.addEventListener('pointerleave', () => {
             drawing = false;
-            ctx.beginPath();
-            pencilDot.style.display = 'none';
+			ctx.beginPath();
+			pencilDot.style.display = 'none';
         });
     </script>
 </body>
+</html>
