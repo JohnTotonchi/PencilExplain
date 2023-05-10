@@ -9,36 +9,50 @@
             overflow: hidden;
             height: 100vh;
             margin: 0;
+            position: relative;
         }
         canvas {
             border: 1px solid black;
+        }
+        .dot {
+            display: none;
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: #000;
+            border-radius: 50%;
         }
     </style>
 </head>
 <body>
     <canvas id="drawingCanvas" width="800" height="600"></canvas>
+    <div class="dot" id="pencilDot"></div>
     <script>
         const canvas = document.getElementById('drawingCanvas');
         const ctx = canvas.getContext('2d');
+        const pencilDot = document.getElementById('pencilDot');
+        
         let drawing = false;
 
         function draw(e) {
-            if (!drawing) return;
-            ctx.lineWidth = 5;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = '#000';
+          if (!drawing) return;
+
+          ctx.lineWidth = 5;
+          ctx.lineCap = 'round';
+          ctx.strokeStyle = '#000';
+
+          if (e.pressure > 0.25) {
+              pencilDot.style.display = 'none';
             
-            if (e.pressure > 0.25) {
-                ctx.lineTo(e.clientX, e.clientY);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(e.clientX, e.clientY);
-            } else {
-                ctx.beginPath();
-                ctx.arc(e.clientX, e.clientY, 2.5, 0, Math.PI * 2);
-                ctx.fillStyle = '#000';
-                ctx.fill();
-            }
+              ctx.lineTo(e.clientX, e.clientY);
+              ctx.stroke();
+              ctx.beginPath();
+              ctx.moveTo(e.clientX, e.clientY);
+          } else {
+              pencilDot.style.top = `${e.clientY - 2.5}px`;
+              pencilDot.style.left = `${e.clientX - 2.5}px`;
+              pencilDot.style.display = 'block';
+          }
         }
 
         canvas.addEventListener('pointerdown', (e) => {
@@ -53,11 +67,13 @@
         canvas.addEventListener('pointerup', () => {
             drawing = false;
             ctx.beginPath();
+            pencilDot.style.display = 'none';
         });
 
         canvas.addEventListener('pointerleave', () => {
             drawing = false;
             ctx.beginPath();
+            pencilDot.style.display = 'none';
         });
     </script>
 </body>
