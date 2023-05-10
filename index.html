@@ -97,20 +97,10 @@ document.body.addEventListener('keydown', (e) => {
         if (ctx.globalCompositeOperation === 'destination-out') {
             ctx.globalCompositeOperation = 'source-over'; // Switch to drawing mode
             pencilDot.style.backgroundColor = '#000'; // Change dot color to match drawing color
+	    ctx.lineWidth = 10;
         } else {
             ctx.globalCompositeOperation = 'destination-out'; // Switch to erasing mode
             pencilDot.style.backgroundColor = '#FFF'; // Change dot color to match background color
-        }
-    }
-});
-	document.body.addEventListener('keydown', (e) => {
-	if (e.key === '1') {
-        if (ctx.globalCompositeOperation === 'destination-out') {
-            ctx.globalCompositeOperation = 'source-over'; // Switch to drawing mode
-            pencilDot.style.backgroundColor = '#000'; // Change dot color to match drawing color
-        } else {
-            ctx.globalCompositeOperation = 'destination-out'; // Switch to red mode
-            pencilDot.style.backgroundColor = '#FF2D00'; // Change dot color to match background color
         }
     }
 });
