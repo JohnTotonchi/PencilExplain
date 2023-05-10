@@ -96,7 +96,7 @@ document.body.addEventListener('keydown', (e) => {
         if (ctx.globalCompositeOperation === 'destination-out') {
             ctx.globalCompositeOperation = 'source-over'; // Switch to drawing mode
             pencilDot.style.backgroundColor = '#000'; // Change dot color to match drawing color
-	    ctx.lineWidth = 10;
+	    ctx.lineWidth = 5;
         } else {
             ctx.globalCompositeOperation = 'destination-out'; // Switch to erasing mode
             pencilDot.style.backgroundColor = '#FFF'; // Change dot color to match background color
