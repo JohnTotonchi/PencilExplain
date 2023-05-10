@@ -50,7 +50,7 @@
               ctx.beginPath();
               ctx.moveTo(e.clientX, e.clientY);
           } else {
-              ctz.endPath();
+              ctx.endPath();
               pencilDot.style.top = `${e.clientY - 2.5}px`;
               pencilDot.style.left = `${e.clientX - 2.5}px`;
               pencilDot.style.display = 'block';
