@@ -21,7 +21,7 @@
             height: 5px;
             background-color: #000;
             border-radius: 50%;
-            z-index: 100;
+            z-index: 100; /* Add this line */
         }
     </style>
 </head>
@@ -42,7 +42,7 @@
           ctx.lineCap = 'round';
           ctx.strokeStyle = '#000';
 
-          if (e.pressure > 0.15) {
+          if (e.pressure > 0.10) {
               pencilDot.style.display = 'none';
             
               ctx.lineTo(e.clientX, e.clientY);
@@ -59,6 +59,7 @@
         canvas.addEventListener('pointerdown', (e) => {
             if (e.pointerType === 'pen') {
                 drawing = true;
+                ctx.beginPath();
                 draw(e);
             }
         });
@@ -78,4 +79,3 @@
         });
     </script>
 </body>
-</html>
