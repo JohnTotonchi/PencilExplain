@@ -42,7 +42,7 @@
           ctx.lineCap = 'round';
           ctx.strokeStyle = '#000';
 
-          if (e.pressure > 0.50) {
+          if (e.pressure > 0.15) {
               pencilDot.style.display = 'none';
             
               ctx.lineTo(e.clientX, e.clientY);
@@ -50,6 +50,7 @@
               ctx.beginPath();
               ctx.moveTo(e.clientX, e.clientY);
           } else {
+              ctz.endPath();
               pencilDot.style.top = `${e.clientY - 2.5}px`;
               pencilDot.style.left = `${e.clientX - 2.5}px`;
               pencilDot.style.display = 'block';
