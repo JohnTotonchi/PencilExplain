@@ -1,47 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple Pencil Drawing App</title>
-  <style>
-    #canvas {
-      border: 1px solid #000000;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Pencil Drawing App</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
-  <canvas id="canvas" width="600" height="400"></canvas>
-  <script>
-    // Get the canvas and its context
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+    <canvas id="drawingCanvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
 
-    // Initialize the last known x, y, and force values
-    let lastX, lastY, lastForce;
-
-    // Add an event listener for pointermove events
-    canvas.addEventListener('pointermove', function(event) {
-      // Check if the event was triggered by the Apple Pencil
-      if (event.pointerType === 'pen' && event.pointerId === 1) {
-        // Get the current x, y, and force values
-        const currentX = event.pageX;
-        const currentY = event.pageY;
-        const currentForce = event.pressure;
-
-        // Draw a curve if the force value is above 0.25
-        if (currentForce > 0.25) {
-          ctx.beginPath();
-          ctx.moveTo(lastX, lastY);
-          ctx.quadraticCurveTo(lastX, lastY, (currentX + lastX) / 2, (currentY + lastY) / 2);
-          ctx.stroke();
+        function draw(e) {
+            if (!drawing) return;
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000';
+            
+            if (e.pressure > 0.25) {
+                ctx.lineTo(e.clientX, e.clientY);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(e.clientX, e.clientY);
+            } else {
+                ctx.beginPath();
+                ctx.arc(e.clientX, e.clientY, 2.5, 0, Math.PI * 2);
+                ctx.fillStyle = '#000';
+                ctx.fill();
+            }
         }
 
-        // Save the current x, y, and force values
-        lastX = currentX;
-        lastY = currentY;
-        lastForce = currentForce;
-      }
-    }, false);
-  </script>
+        canvas.addEventListener('pointerdown', (e) => {
+            if (e.pointerType === 'pen') {
+                drawing = true;
+                draw(e);
+            }
+        });
+
+        canvas.addEventListener('pointermove', draw);
+
+        canvas.addEventListener('pointerup', () => {
+            drawing = false;
+            ctx.beginPath();
+        });
+
+        canvas.addEventListener('pointerleave', () => {
+            drawing = false;
+            ctx.beginPath();
+        });
+    </script>
 </body>
 </html>
