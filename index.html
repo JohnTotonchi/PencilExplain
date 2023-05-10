@@ -45,28 +45,27 @@ function updateLastPosition(e) {
 }
 
 function draw(e) {
-	if (!drawing) return;
+    if (!drawing) return;
 
-	ctx.lineWidth = 5; // Change to desired line width
-	
-	ctx.lineCap = 'round';
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
 
-	if (e.pressure > 0.25) {
-		pencilDot.style.display = 'none';
+    pencilDot.style.top = `${e.clientY - 2.5}px`;
+    pencilDot.style.left = `${e.clientX - 2.5}px`;
 
-		ctx.beginPath();
-		ctx.moveTo(lastX, lastY);
-		ctx.lineTo(e.clientX, e.clientY);
-		ctx.stroke();
+    if (e.pressure > 0.25) {
+        pencilDot.style.display = ctx.globalCompositeOperation === 'destination-out' ? 'block' : 'none';
 
-		updateLastPosition(e); // Update the last position
-	} else {
-		pencilDot.style.top = `${e.clientY - 2.5}px`;
-		pencilDot.style.left = `${e.clientX - 2.5}px`;
-		pencilDot.style.display = 'block';
-		
-		updateLastPosition(e); // Update the last position
-	}
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(e.clientX, e.clientY);
+        ctx.stroke();
+
+        updateLastPosition(e); // Update the last position
+    } else {
+        pencilDot.style.display = 'block';
+        updateLastPosition(e); // Update the last position
+    }
 }
 
 canvas.addEventListener('pointerdown', (e) => {
