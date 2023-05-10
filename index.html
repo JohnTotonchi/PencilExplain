@@ -53,7 +53,7 @@ function draw(e) {
     pencilDot.style.top = `${e.clientY - 2.5}px`;
     pencilDot.style.left = `${e.clientX - 2.5}px`;
 
-    if (e.pressure > 0.25) {
+    if (e.pressure > 0.15) {
         pencilDot.style.display = ctx.globalCompositeOperation === 'destination-out' ? 'block' : 'none';
 
         ctx.beginPath();
@@ -96,7 +96,6 @@ document.body.addEventListener('keydown', (e) => {
         if (ctx.globalCompositeOperation === 'destination-out') {
             ctx.globalCompositeOperation = 'source-over'; // Switch to drawing mode
             pencilDot.style.backgroundColor = '#000'; // Change dot color to match drawing color
-	    ctx.lineWidth = 5;
         } else {
             ctx.globalCompositeOperation = 'destination-out'; // Switch to erasing mode
             pencilDot.style.backgroundColor = '#FFF'; // Change dot color to match background color
