@@ -24,12 +24,19 @@
 			z-index: 100; 
 		}
     </style>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
     <canvas id="drawingCanvas" width="1080" height="810"></canvas>
     <div class="dot" id="pencilDot"></div>
 
 <script>
+const socket = io(); // Initialize socket.io connection
+
+const urlParams = new URLSearchParams(window.location.search); // Get URL parameters
+const room = urlParams.get('room'); // Get room parameter
+
+socket.emit('joinRoom', room); // Join room
 
 const canvas = document.getElementById('drawingCanvas');
 const ctx = canvas.getContext('2d');
